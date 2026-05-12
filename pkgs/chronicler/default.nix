@@ -35,7 +35,10 @@ writeShellScriptBin "chronicler" wrapper-script
     license = {
       fullName = "PolyForm Shield License 1.0.0";
       url = "https://polyformproject.org";
+      free = false;
+      redistributable = true;
     };
     mainProgram = "chronicler";
+    platforms = [ "x86_64-linux" ];
   };
 }
