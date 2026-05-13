@@ -50,5 +50,18 @@ stdenv.mkDerivation {
       	cp ${desktop-entry}/share/applications/${name}.desktop $out/share/applications
     '';
 
+  meta = {
+    description = "a free, offline worldbuilding tool built for writers, novelists, and tabletop RPG game masters";
+    homepage = "https://chronicler.pro/";
+    license = {
+      fullName = "PolyForm Shield License 1.0.0";
+      url = "https://polyformproject.org";
+      free = false;
+      redistributable = true;
+    };
+    mainProgram = "chronicler";
+    platforms = [ "x86_64-linux" ];
+  };
+
   dontBuild = true;
 }
