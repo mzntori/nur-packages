@@ -1,7 +1,10 @@
 {
   appimageTools,
   fetchurl,
+  makeDesktopItem,
+  stdenv,
   writeShellScriptBin,
+  writeShellApplication,
   wayland,
 
   fixWebkit ? false,
@@ -9,10 +12,11 @@
 }:
 
 let
+  name = "chronicler";
   version = "0.51.4";
 
   chronicler-unwrapped = appimageTools.wrapType2 {
-    pname = "chronicler";
+    pname = name;
     version = "${version}-alpha";
     src = fetchurl {
       url = "https://github.com/mak-kirkland/chronicler/releases/download/v${version}-alpha/Chronicler_${version}_amd64.AppImage";
@@ -20,25 +24,46 @@ let
     };
   };
 
-  wrapper-script = ''
-    export WEBKIT_DISABLE_DMABUF_RENDERER=${if fixWebkit then "1" else ""}
-    export LD_PRELOAD=${if fixWayland then wayland + "/lib/libwayland-client.so" else ""}
-    exec ${chronicler-unwrapped}/bin/chronicler
-  '';
-in
-
-writeShellScriptBin "chronicler" wrapper-script
-// {
-  meta = {
-    description = "a free, offline worldbuilding tool built for writers, novelists, and tabletop RPG game masters";
-    homepage = "https://chronicler.pro/";
-    license = {
-      fullName = "PolyForm Shield License 1.0.0";
-      url = "https://polyformproject.org";
-      free = false;
-      redistributable = true;
-    };
-    mainProgram = "chronicler";
-    platforms = [ "x86_64-linux" ];
+  wrapper-script = writeShellApplication {
+    name = name;
+    text = ''
+      export WEBKIT_DISABLE_DMABUF_RENDERER=${if fixWebkit then "1" else ""}
+      export LD_PRELOAD=${if fixWayland then wayland + "/lib/libwayland-client.so" else ""}
+      exec ${chronicler-unwrapped}/bin/chronicler
+    '';
   };
+in
+stdenv.mkDerivation {
+  name = name;
+  buildCommand =
+    let
+      desktop-entry = makeDesktopItem {
+        name = name;
+        desktopName = name;
+        exec = "${wrapper-script}/bin/${name} %f";
+        terminal = false;
+      };
+    in
+    ''
+        mkdir -p $out/bin
+        cp ${wrapper-script}/bin/${name} $out/bin
+      	mkdir -p $out/share/applications
+      	cp ${desktop-entry}/share/applications/${name}.desktop $out/share/applications
+    '';
+  dontBuild = true;
 }
+# writeShellScriptBin "chronicler" wrapper-script
+# // {
+#   meta = {
+#     description = "a free, offline worldbuilding tool built for writers, novelists, and tabletop RPG game masters";
+#     homepage = "https://chronicler.pro/";
+#     license = {
+#       fullName = "PolyForm Shield License 1.0.0";
+#       url = "https://polyformproject.org";
+#       free = false;
+#       redistributable = true;
+#     };
+#     mainProgram = "chronicler";
+#     platforms = [ "x86_64-linux" ];
+#   };
+# }
