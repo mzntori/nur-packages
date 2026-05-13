@@ -3,7 +3,6 @@
   fetchurl,
   makeDesktopItem,
   stdenv,
-  writeShellScriptBin,
   writeShellApplication,
   wayland,
 
@@ -50,20 +49,6 @@ stdenv.mkDerivation {
       	mkdir -p $out/share/applications
       	cp ${desktop-entry}/share/applications/${name}.desktop $out/share/applications
     '';
+
   dontBuild = true;
 }
-# writeShellScriptBin "chronicler" wrapper-script
-# // {
-#   meta = {
-#     description = "a free, offline worldbuilding tool built for writers, novelists, and tabletop RPG game masters";
-#     homepage = "https://chronicler.pro/";
-#     license = {
-#       fullName = "PolyForm Shield License 1.0.0";
-#       url = "https://polyformproject.org";
-#       free = false;
-#       redistributable = true;
-#     };
-#     mainProgram = "chronicler";
-#     platforms = [ "x86_64-linux" ];
-#   };
-# }
