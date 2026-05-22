@@ -6,20 +6,22 @@
   writeShellApplication,
   wayland,
 
+  # this is just a hack so this can be used easily before being merged into nur
+  allowUnfreeLicense ? false,
   fixWebkit ? false,
   fixWayland ? false,
 }:
 
 let
   name = "chronicler";
-  version = "0.51.5";
+  version = "0.51.6";
 
   chronicler-unwrapped = appimageTools.wrapType2 {
     pname = name;
     version = "${version}-alpha";
     src = fetchurl {
       url = "https://github.com/mak-kirkland/chronicler/releases/download/v${version}-alpha/Chronicler_${version}_amd64.AppImage";
-      sha256 = "sha256-eOcZ7f8OdHXnpsiASDtFlDO+pbbeWLaI29FjpcvRwM8=";
+      sha256 = "sha256-fcz3iG0aauvcJAgR8rcw1BTZmchB/t9/M+aCPoNu9+8=";
     };
   };
 
@@ -56,7 +58,7 @@ stdenv.mkDerivation {
     license = {
       fullName = "PolyForm Shield License 1.0.0";
       url = "https://polyformproject.org";
-      free = false;
+      free = allowUnfreeLicense;
       redistributable = true;
     };
     mainProgram = "chronicler";
