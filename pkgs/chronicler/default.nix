@@ -14,14 +14,14 @@
 
 let
   name = "chronicler";
-  version = "0.51.6";
+  version = "0.52.0";
 
   chronicler-unwrapped = appimageTools.wrapType2 {
     pname = name;
     version = "${version}-alpha";
     src = fetchurl {
       url = "https://github.com/mak-kirkland/chronicler/releases/download/v${version}-alpha/Chronicler_${version}_amd64.AppImage";
-      sha256 = "sha256-fcz3iG0aauvcJAgR8rcw1BTZmchB/t9/M+aCPoNu9+8=";
+      sha256 = "sha256-K61dooU3+hdm4T0/msp8UsstQUKogpLmC+KGDGid07E=";
     };
   };
 
