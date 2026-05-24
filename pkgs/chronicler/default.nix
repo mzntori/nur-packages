@@ -1,13 +1,12 @@
 {
   appimageTools,
   fetchurl,
+  lib,
   makeDesktopItem,
   stdenv,
   writeShellApplication,
   wayland,
 
-  # this is just a hack so this can be used easily before being merged into nur
-  allowUnfreeLicense ? false,
   fixWebkit ? false,
   fixWayland ? false,
 }:
@@ -58,11 +57,12 @@ stdenv.mkDerivation {
     license = {
       fullName = "PolyForm Shield License 1.0.0";
       url = "https://polyformproject.org";
-      free = allowUnfreeLicense;
+      free = false;
       redistributable = true;
     };
     mainProgram = "chronicler";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
   dontBuild = true;
